@@ -1,5 +1,5 @@
 from magento_sul import MagentoSUL
-from dc_lstar import run_dc_lstar
+from dc_lstar_2 import run_dc_lstar
 from dc_oracle import DCOracle
 from aalpy.utils import save_automaton_to_file
 

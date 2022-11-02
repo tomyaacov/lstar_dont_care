@@ -1,7 +1,7 @@
 from magento_sul import DCSUL
 from dc_observation_table import DCObservationTable
 from dc_oracle import DCOracle
-from utils import find_minimal_consistent_dfa
+from dc_dfa import find_minimal_consistent_dfa
 from aalpy.utils.HelperFunctions import extend_set, all_prefixes
 
 def run_dc_lstar(alphabet: list, sul: DCSUL, oracle: DCOracle):
@@ -30,7 +30,7 @@ def run_dc_lstar(alphabet: list, sul: DCSUL, oracle: DCOracle):
         cex = oracle.check_completeness(c_hypothesis)
 
         if cex is None:
-            hypothesis = find_minimal_consistent_dfa(observation_table)
+            hypothesis = find_minimal_consistent_dfa(c_hypothesis)
             cex = sul.check_soundness(hypothesis, alphabet)
             if cex is None:
                 return hypothesis
