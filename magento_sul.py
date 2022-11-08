@@ -46,11 +46,13 @@ class MagentoSUL(DCSUL):
 
     def pre(self):
         self.current_state = tuple()
+        return "?"
 
     def post(self):
         pass
 
     def step(self, letter):
+
         self.current_state += (letter,)
         if (self.current_state, True) in self.traces:
             return "+"

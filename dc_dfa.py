@@ -135,11 +135,13 @@ def minimize_table(transitions, outputs, initial_state_old):
 
 def dfa_from_table(transitions, outputs, init_state_idx, alphabet):
     states = []
+    states_dict = {}
     for i in range(transitions.shape[0]):
         states.append(DfaState(i))
+        states_dict[i] = states[-1]
     for i in range(transitions.shape[0]):
         for j in range(transitions.shape[1]):
-            states[i].transitions[alphabet[j]] = transitions[i,j]
+            states[i].transitions[alphabet[j]] = states_dict[transitions[i,j]]
             states[transitions[i,j]].is_accepting = bool(outputs[i,j])
     return Dfa(states[init_state_idx], states)
 
