@@ -1,0 +1,19 @@
+digraph magento_mealy {
+0 [label=0];
+1 [label=1];
+2 [label=2];
+0 -> 1  [label="L1/0"];
+0 -> 0  [label="L2/0"];
+0 -> 0  [label="A/0"];
+0 -> 0  [label="C/0"];
+1 -> 1  [label="L1/0"];
+1 -> 0  [label="L2/1"];
+1 -> 1  [label="A/0"];
+1 -> 0  [label="C/1"];
+2 -> 2  [label="L1/0"];
+2 -> 1  [label="L2/0"];
+2 -> 0  [label="A/0"];
+2 -> 0  [label="C/0"];
+__start0 [label="", shape=none];
+__start0 -> 2  [label=""];
+}

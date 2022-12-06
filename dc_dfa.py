@@ -1,6 +1,7 @@
 import numpy as np
 from aalpy.base import Automaton
 from aalpy.automata.Dfa import Dfa, DfaState
+from aalpy.automata.MealyMachine import MealyMachine, MealyState
 from itertools import combinations
 
 
@@ -82,7 +83,8 @@ def minimize_table(transitions, outputs, initial_state_old):
 
     candidates = [set([x for x in range(1, outputs.shape[0])]),
                   set([0] + [x for x in range(1, outputs.shape[0]) if pairs[(0, x)]])]
-    print(str(0 + 1) + ")", [[x + 1 for x in cand] for cand in candidates])
+    #print(str(0 + 1) + ")", [[x + 1 for x in cand] for cand in candidates])
+    print(str(0 + 1) + ")", [[x for x in cand] for cand in candidates])
     for i in range(1, outputs.shape[0] - 1):
         new_candidates = []
         for cand in candidates:
@@ -107,7 +109,8 @@ def minimize_table(transitions, outputs, initial_state_old):
             if flag and cand not in without_sub_groups:
                 without_sub_groups.append(cand)
         candidates = without_sub_groups
-        print(str(i + 1) + ")", [[x + 1 for x in cand] for cand in candidates])
+        print(str(i + 1) + ")", [[x for x in cand] for cand in candidates])
+        #print(str(i + 1) + ")", [[x + 1 for x in cand] for cand in candidates])
     num_of_groups = 1
     while num_of_groups <= len(candidates):
         for group in combinations(candidates, num_of_groups):
@@ -146,11 +149,24 @@ def dfa_from_table(transitions, outputs, init_state_idx, alphabet):
     return Dfa(states[init_state_idx], states)
 
 
+def mealy_from_table(transitions, outputs, init_state_idx, alphabet):
+    states = []
+    states_dict = {}
+    for i in range(transitions.shape[0]):
+        states.append(MealyState(i))
+        states_dict[i] = states[-1]
+    for i in range(transitions.shape[0]):
+        for j in range(transitions.shape[1]):
+            states[i].transitions[alphabet[j]] = states_dict[transitions[i,j]]
+            states[i].output_fun[alphabet[j]] = outputs[i,j]
+    return MealyMachine(states[init_state_idx], states)
+
 def find_minimal_consistent_dfa(dfa3: Automaton):
     transitions, outputs, init_state_idx = dfa3_to_tables(dfa3)
     final_transitions, final_outputs, init_state_idx = minimize_table(transitions, outputs, init_state_idx)
-    dfa = dfa_from_table(final_transitions, final_outputs, init_state_idx, dfa3.get_input_alphabet())
-    return dfa
+    #dfa = dfa_from_table(final_transitions, final_outputs, init_state_idx, dfa3.get_input_alphabet())
+    mealy_machine = mealy_from_table(final_transitions, final_outputs, init_state_idx, dfa3.get_input_alphabet())
+    return mealy_machine
 
 # transitions = np.array([
 #        [-1, 2, 4, 1],
