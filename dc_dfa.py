@@ -84,7 +84,7 @@ def minimize_table(transitions, outputs, initial_state_old):
     candidates = [set([x for x in range(1, outputs.shape[0])]),
                   set([0] + [x for x in range(1, outputs.shape[0]) if pairs[(0, x)]])]
     #print(str(0 + 1) + ")", [[x + 1 for x in cand] for cand in candidates])
-    print(str(0 + 1) + ")", [[x for x in cand] for cand in candidates])
+    #print(str(0 + 1) + ")", [[x for x in cand] for cand in candidates])
     for i in range(1, outputs.shape[0] - 1):
         new_candidates = []
         for cand in candidates:
@@ -109,7 +109,7 @@ def minimize_table(transitions, outputs, initial_state_old):
             if flag and cand not in without_sub_groups:
                 without_sub_groups.append(cand)
         candidates = without_sub_groups
-        print(str(i + 1) + ")", [[x for x in cand] for cand in candidates])
+        #print(str(i + 1) + ")", [[x for x in cand] for cand in candidates])
         #print(str(i + 1) + ")", [[x + 1 for x in cand] for cand in candidates])
     num_of_groups = 1
     while num_of_groups <= len(candidates):
@@ -136,19 +136,6 @@ def minimize_table(transitions, outputs, initial_state_old):
         num_of_groups += 1
 
 
-def dfa_from_table(transitions, outputs, init_state_idx, alphabet):
-    states = []
-    states_dict = {}
-    for i in range(transitions.shape[0]):
-        states.append(DfaState(i))
-        states_dict[i] = states[-1]
-    for i in range(transitions.shape[0]):
-        for j in range(transitions.shape[1]):
-            states[i].transitions[alphabet[j]] = states_dict[transitions[i,j]]
-            states[transitions[i,j]].is_accepting = bool(outputs[i,j])
-    return Dfa(states[init_state_idx], states)
-
-
 def mealy_from_table(transitions, outputs, init_state_idx, alphabet):
     states = []
     states_dict = {}
@@ -161,49 +148,33 @@ def mealy_from_table(transitions, outputs, init_state_idx, alphabet):
             states[i].output_fun[alphabet[j]] = outputs[i,j]
     return MealyMachine(states[init_state_idx], states)
 
+
+def dfa_from_table(transitions, outputs, init_state_idx, alphabet):
+    states = []
+    states_dict = {}
+    counter = 0
+    for i in range(transitions.shape[0]):
+        for j in range(transitions.shape[1]):
+            k = (transitions[i, j], outputs[i, j])
+            if k not in states_dict:
+                states.append(DfaState(counter))
+                states_dict[k] = states[-1]
+                counter += 1
+    if (init_state_idx, 0) not in states_dict: # initial state should be accepted (not a bug)
+        states.append(DfaState(counter))
+        states_dict[(init_state_idx, 0)] = states[-1]
+        counter += 1
+
+    for k, s in states_dict.items():
+        for j in range(transitions.shape[1]):
+            s.transitions[alphabet[j]] = states_dict[(transitions[k[0], j], outputs[k[0], j])]
+        s.is_accepting = bool(k[1])
+
+    return Dfa(states_dict[(init_state_idx, 0)], states)
+
 def find_minimal_consistent_dfa(dfa3: Automaton):
     transitions, outputs, init_state_idx = dfa3_to_tables(dfa3)
     final_transitions, final_outputs, init_state_idx = minimize_table(transitions, outputs, init_state_idx)
-    #dfa = dfa_from_table(final_transitions, final_outputs, init_state_idx, dfa3.get_input_alphabet())
-    mealy_machine = mealy_from_table(final_transitions, final_outputs, init_state_idx, dfa3.get_input_alphabet())
-    return mealy_machine
+    #return mealy_from_table(final_transitions, final_outputs, init_state_idx, dfa3.get_input_alphabet())
+    return dfa_from_table(final_transitions, final_outputs, init_state_idx, dfa3.get_input_alphabet())
 
-# transitions = np.array([
-#        [-1, 2, 4, 1],
-#        [4, -1, -1, -1],
-#        [5, 5, -1, -1],
-#        [-1, -1, 1, -1],
-#        [-1, 5, 0, 3],
-#        [2, -1, 1, 2]])
-# outputs = np.array([
-#        [2, 1, 1, 1],
-#        [0, 2, 2, 2],
-#        [0, 1, 2, 2],
-#        [2, 2, 1, 2],
-#        [2, 0, 0, 1],
-#        [0, 2, 0, 1]])
-
-# table 4
-# transitions = np.array([
-#        [-1, 0, 1],
-#        [0, 2, 1],
-#        [2, 1, 0]])
-# outputs = np.array([
-#        [2, 0, 0],
-#        [0, 0, 0],
-#        [1, 0, 0]])
-
-#table 3
-# transitions = np.array([
-#        [-1, 0],
-#        [0, 2],
-#        [3, 1],
-#        [3, 1]])
-# outputs = np.array([
-#        [0, 0],
-#        [0, 0],
-#        [0, 0],
-#        [1, 0]])
-# final_transitions, final_outputs = minimize_table(transitions, outputs)
-# print(final_transitions)
-# print(final_outputs)

@@ -1,5 +1,9 @@
 aalpy==1.2.8
 numpy==1.21.6
+pandas==1.3.5
 pydot==1.4.2
 pyparsing==3.0.9
+python-dateutil==2.8.2
+pytz==2022.6
+six==1.16.0
 tabulate==0.8.10

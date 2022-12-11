@@ -26,24 +26,18 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-
-4. Run the magento example on initial algorithm:
-* find the 3dfa first (find a moor machine using aalpy)
-* find the minimal consistent DFA (using the algorithm from https://ieeexplore.ieee.org/document/5222697)
-
-```shell
-python dc_lstar_2.py
-```
-
-5. Run our initial algorithm on magento toy example:
-* membership queries - for w:
-if w not in M return ?, else check if it is a prefix of P or in F. if not run on system and see result.
-* Equivalence queries - for a 3DFA:
-    - Check that the failing tests in the list are indeed accepted by the 3DFA.
-    - Check that the passing tests are rejected by the 3DFA.
-    - Sample tests from L(3DFA)\cap M and check that they fail.
-    - Sample words from M, and check that they produce the “right” results: pass → rejected, fail → accepted.
-* After the 3DFA is built run a minimization algorithm to get the final DFA
+4. Run our initial algorithms experiment on the magento toy example:
+* find a 3DFA using a standard l star (moore machine):
+  * membership queries - for w:
+  if w not in M return ?, else check if it is a prefix of P or in F. if not run on system and see result.
+  * Equivalence queries - for a 3DFA:
+    * Check that the failing tests in the list are indeed accepted by the 3DFA.
+    * Check that the passing tests are rejected by the 3DFA.
+    * Sample tests from L(3DFA)\cap M and check that they fail.
+    * Sample words from M, and check that they produce the “right” results: pass → rejected, fail → accepted.
+* After the 3DFA is built run this 2  options to get the final DFA:
+  * run RPNI on a data set created from the 3DFA (observation table).
+  * run the minimization algorithm from [here](https://ieeexplore.ieee.org/document/5222697) to get the DFA. 
 ```shell
 python test_suite_based_lstar.py
 ```

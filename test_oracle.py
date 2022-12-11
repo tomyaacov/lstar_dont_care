@@ -14,14 +14,17 @@ class TestOracle(Oracle):
         self.max_sample_len = max_sample_len
 
     def find_cex(self, hypothesis: MooreMachine):
-
         for failed_test in self.sul.failed:
             result = hypothesis.execute_sequence(hypothesis.initial_state, failed_test)[-1]
+            self.num_queries += 1
+            self.num_steps += len(failed_test)
             if result != "+":
                 return failed_test
 
         for passed_test in self.sul.passed:
             result = hypothesis.execute_sequence(hypothesis.initial_state, passed_test)[-1]
+            self.num_queries += 1
+            self.num_steps += len(failed_test)
             if result != "-":
                 return passed_test
 
@@ -33,7 +36,9 @@ class TestOracle(Oracle):
             self.sul.spec_dfa.reset_to_initial()
             num_samples_done += 1
             num_steps = sample_lengths.pop(0)
+            self.num_queries += 1
             for _ in range(num_steps):
+                self.num_steps += 1
                 inputs.append(choice(self.alphabet))
                 out_spec = self.sul.spec_dfa.step(inputs[-1])
                 out_hyp = hypothesis.step(inputs[-1])
@@ -50,7 +55,9 @@ class TestOracle(Oracle):
             self.sul.spec_dfa.reset_to_initial()
             num_samples_done += 1
             num_steps = sample_lengths.pop(0)
+            self.num_queries += 1
             for _ in range(num_steps):
+                self.num_steps += 1
                 inputs.append(choice(self.alphabet))
                 out_spec = self.sul.spec_dfa.step(inputs[-1])
                 out_hyp = hypothesis.step(inputs[-1])

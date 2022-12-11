@@ -1,4 +1,4 @@
-digraph magento_dfa3 {
+digraph "output/magento_dfa3_0.7" {
 s0 [label="s0|-", shape=record, style=rounded];
 s1 [label="s1|-", shape=record, style=rounded];
 s2 [label="s2|-", shape=record, style=rounded];

@@ -13,8 +13,13 @@ class TestSUL(SUL):
                 self.passed.add(p[:i+1])
         self.spec_dfa = spec_dfa
         self.system_dfa = system_dfa
+        self.num_queries = 0
+        self.num_steps = 0
+        self.system_queries = 0
 
     def query(self, word: tuple) -> list:
+        self.num_queries += 1
+        self.num_steps += len(word)
         if len(word) == 0:
             in_system = self.spec_dfa.initial_state.is_accepting
         else:
@@ -25,6 +30,7 @@ class TestSUL(SUL):
             return ["-"]
         if word in self.failed:
             return ["+"]
+        self.system_queries += 1
         if len(word) == 0:
             passed_in_system = self.system_dfa.initial_state.is_accepting
         else:

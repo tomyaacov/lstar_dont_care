@@ -1,0 +1,24 @@
+digraph "output/magento_result_a_0.6" {
+0 [label=0];
+1 [label=1];
+2 [label=2, shape=doublecircle];
+3 [label=3];
+0 -> 0  [label=L1];
+0 -> 2  [label=L2];
+0 -> 0  [label=A];
+0 -> 2  [label=C];
+1 -> 0  [label=L1];
+1 -> 1  [label=L2];
+1 -> 1  [label=A];
+1 -> 1  [label=C];
+2 -> 0  [label=L1];
+2 -> 1  [label=L2];
+2 -> 1  [label=A];
+2 -> 1  [label=C];
+3 -> 3  [label=L1];
+3 -> 0  [label=L2];
+3 -> 1  [label=A];
+3 -> 1  [label=C];
+__start0 [label="", shape=none];
+__start0 -> 3  [label=""];
+}
