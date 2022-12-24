@@ -1,4 +1,4 @@
-digraph "output/magento_dfa3_0.5" {
+digraph "output/magento_dfa3_0.1" {
 s0 [label="s0|-", shape=record, style=rounded];
 s1 [label="s1|-", shape=record, style=rounded];
 s2 [label="s2|-", shape=record, style=rounded];
@@ -7,8 +7,6 @@ s4 [label="s4|-", shape=record, style=rounded];
 s5 [label="s5|-", shape=record, style=rounded];
 s6 [label="s6|-", shape=record, style=rounded];
 s7 [label="s7|-", shape=record, style=rounded];
-s8 [label="s8|-", shape=record, style=rounded];
-s9 [label="s9|+", shape=record, style=rounded];
 s0 -> s1  [label=L1];
 s0 -> s2  [label=L2];
 s0 -> s3  [label=A];
@@ -30,25 +28,17 @@ s4 -> s3  [label=L2];
 s4 -> s6  [label=A];
 s4 -> s3  [label=C];
 s5 -> s3  [label=L1];
-s5 -> s7  [label=L2];
+s5 -> s6  [label=L2];
 s5 -> s5  [label=A];
-s5 -> s8  [label=C];
+s5 -> s7  [label=C];
 s6 -> s3  [label=L1];
 s6 -> s3  [label=L2];
 s6 -> s6  [label=A];
-s6 -> s9  [label=C];
+s6 -> s7  [label=C];
 s7 -> s3  [label=L1];
 s7 -> s3  [label=L2];
-s7 -> s7  [label=A];
-s7 -> s8  [label=C];
-s8 -> s3  [label=L1];
-s8 -> s3  [label=L2];
-s8 -> s3  [label=A];
-s8 -> s3  [label=C];
-s9 -> s3  [label=L1];
-s9 -> s3  [label=L2];
-s9 -> s3  [label=A];
-s9 -> s3  [label=C];
+s7 -> s3  [label=A];
+s7 -> s3  [label=C];
 __start0 [label="", shape=none];
 __start0 -> s0  [label=""];
 }

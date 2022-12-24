@@ -18,6 +18,8 @@ class TestSUL(SUL):
         self.system_queries = 0
 
     def query(self, word: tuple) -> list:
+        if type(word) == list:
+            word = tuple(word)
         self.num_queries += 1
         self.num_steps += len(word)
         if len(word) == 0:

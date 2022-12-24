@@ -24,7 +24,7 @@ class TestOracle(Oracle):
         for passed_test in self.sul.passed:
             result = hypothesis.execute_sequence(hypothesis.initial_state, passed_test)[-1]
             self.num_queries += 1
-            self.num_steps += len(failed_test)
+            self.num_steps += len(passed_test)
             if result != "-":
                 return passed_test
 

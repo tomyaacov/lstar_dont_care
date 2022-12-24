@@ -1,0 +1,25 @@
+digraph "output/expected_bug_dfa_negative.dot" {
+s0 [label=s0];
+s1 [label=s1];
+s2 [label=s2];
+s3 [label=s3];
+s4 [label=s4];
+s5 [label=s5];
+s6 [label=s6, shape=doublecircle];
+s0 -> s1  [label=L1];
+s0 -> s2  [label=L2];
+s0 -> s3  [label="A,C"];
+s1 -> s3  [label="L1,A,C"];
+s1 -> s4  [label=L2];
+s2 -> s4  [label=L1];
+s2 -> s3  [label="L2,A,C"];
+s3 -> s3  [label="L1,L2,A,C"];
+s4 -> s5  [label=A];
+s4 -> s0  [label="L1,L2,C"];
+s5 -> s5  [label=A];
+s5 -> s6  [label=C];
+s5 -> s0  [label="L1,L2"];
+s6 -> s0  [label="L1,L2,A,C"];
+__start0 [label="", shape=none];
+__start0 -> s0  [label=""];
+}

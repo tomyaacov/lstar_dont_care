@@ -78,8 +78,8 @@ if __name__ == "__main__":
 
     results = pd.DataFrame(columns=["test_coverage",
                                     "l_star_learning_time",
-                                    "l_star_queries_membership",
-                                    "l_star_queries_equivalence",
+                                    #"l_star_queries_membership",
+                                    #"l_star_queries_equivalence",
                                     "3dfa_size",
                                     "l_star_system_queries",
                                     "option_a_time",
@@ -90,12 +90,12 @@ if __name__ == "__main__":
                                     "opt_b_acc",
                                     ])
 
-    for test_coverage in [0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]:
+    for test_coverage in [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]:
         passed_tests = set([w for w, l in total_traces if l and random.random() <= test_coverage])
         failed_tests = set([w for w, l in total_traces if not l and random.random() <= test_coverage])
 
         sul = TestSUL(failed_tests, passed_tests, spec_dfa, system_dfa)
-        oracle = TestOracle(alphabet, sul, sample_size=10, min_walk_len=1, max_sample_len=7)
+        oracle = TestOracle(alphabet, sul, sample_size=1, min_walk_len=1, max_sample_len=7)
 
         dfa3, data = run_Lstar(alphabet, sul, oracle, cex_processing='rs', closing_strategy='single',
                                automaton_type='moore', cache_and_non_det_check=False, return_data=True)
@@ -123,8 +123,8 @@ if __name__ == "__main__":
 
         results = results.append({"test_coverage": test_coverage,
                                   "l_star_learning_time": data["total_time"],
-                                  "l_star_queries_membership": data["queries_learning"],
-                                  "l_star_queries_equivalence": data["queries_eq_oracle"],
+                                  #"l_star_queries_membership": data["queries_learning"],
+                                  #"l_star_queries_equivalence": data["queries_eq_oracle"],
                                   "3dfa_size": dfa3.size,
                                   "l_star_system_queries": sul.system_queries,
                                   "option_a_time": opt_a_time,

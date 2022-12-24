@@ -1,4 +1,4 @@
-digraph "output/magento_result_a_0.3" {
+digraph "output/magento_result_a_0.1" {
 0 [label=0];
 0 -> 0  [label=L1];
 0 -> 0  [label=L2];
