@@ -76,7 +76,7 @@ def run_Lstar(alphabet: list, sul: SUL, eq_oracle: Oracle, automaton_type,
 
         if print_level == 3:
             print('Counterexample', cex)
-
+        print('Counterexample', cex)
         # Process counterexample and ask membership queries
         if not cex_processing:
             s_to_update = []

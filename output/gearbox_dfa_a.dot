@@ -1,0 +1,10 @@
+digraph "output/gearbox_dfa_a" {
+0 [label=0];
+0 -> 0  [label=press_clutch];
+0 -> 0  [label=release_clutch];
+0 -> 0  [label=put_in_reverse];
+0 -> 0  [label=increase_gear];
+0 -> 0  [label=decrease_gear];
+__start0 [label="", shape=none];
+__start0 -> 0  [label=""];
+}

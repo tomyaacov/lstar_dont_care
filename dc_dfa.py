@@ -173,8 +173,8 @@ def dfa_from_table(transitions, outputs, init_state_idx, alphabet):
     return Dfa(states_dict[(init_state_idx, 0)], states)
 
 def find_minimal_consistent_dfa(dfa3: Automaton):
+    from aalpy.utils import save_automaton_to_file
     transitions, outputs, init_state_idx = dfa3_to_tables(dfa3)
     final_transitions, final_outputs, init_state_idx = minimize_table(transitions, outputs, init_state_idx)
-    #return mealy_from_table(final_transitions, final_outputs, init_state_idx, dfa3.get_input_alphabet())
-    return dfa_from_table(final_transitions, final_outputs, init_state_idx, dfa3.get_input_alphabet())
+    return dfa_from_table(final_transitions, final_outputs, init_state_idx, dfa3.get_input_alphabet()), mealy_from_table(final_transitions, final_outputs, init_state_idx, dfa3.get_input_alphabet())
 

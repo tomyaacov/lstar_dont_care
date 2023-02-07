@@ -36,6 +36,8 @@ def dfa3_to_data(dfa3: MooreMachine):
 
 
 def accuracy(hypothesis: Automaton, passed_tests, failed_tests):
+    if (len(passed_tests) + len(passed_tests)) == 0:
+        return 1
     # sanity check
     counter = 0
     print("misclassified passed tests:")
@@ -89,13 +91,15 @@ if __name__ == "__main__":
                                     "option_b_dfa_size",
                                     "opt_b_acc",
                                     ])
-
+    total_traces_random = [(w, l, random.random()) for w, l in total_traces]
     for test_coverage in [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]:
-        passed_tests = set([w for w, l in total_traces if l and random.random() <= test_coverage])
-        failed_tests = set([w for w, l in total_traces if not l and random.random() <= test_coverage])
+        passed_tests_train = set([w for w, l, r in total_traces_random if l and r <= test_coverage])
+        failed_tests_train = set([w for w, l, r in total_traces_random if not l and r <= test_coverage])
+        passed_tests_test = set([w for w, l, r in total_traces_random if l and r > test_coverage])
+        failed_tests_test = set([w for w, l, r in total_traces_random if not l and r > test_coverage])
 
-        sul = TestSUL(failed_tests, passed_tests, spec_dfa, system_dfa)
-        oracle = TestOracle(alphabet, sul, sample_size=1, min_walk_len=1, max_sample_len=7)
+        sul = TestSUL(failed_tests_train, passed_tests_train, spec_dfa, system_dfa)
+        oracle = TestOracle(alphabet, sul, sample_size=100, min_walk_len=1, max_sample_len=10)
 
         dfa3, data = run_Lstar(alphabet, sul, oracle, cex_processing='rs', closing_strategy='single',
                                automaton_type='moore', cache_and_non_det_check=False, return_data=True)
@@ -106,20 +110,18 @@ if __name__ == "__main__":
         dfa_a = find_minimal_consistent_dfa(dfa3)
         opt_a_time = time.time() - opt_a_start
         save_automaton_to_file(dfa_a, path="output/magento_result_a_" + str(test_coverage))
-        opt_a_acc = accuracy(dfa_a,
-                             set([w for w, l in total_traces if l]),
-                             set([w for w, l in total_traces if not l]))
+        opt_a_acc = accuracy(dfa_a, passed_tests_test, failed_tests_test)
 
         print("option b:")
         opt_b_start = time.time()
-        rpni_data = dfa3_to_data(dfa3)
-        # rpni_data = observation_table_to_data(data["observation_table"]) # not working!!!
+        #rpni_data = dfa3_to_data(dfa3)
+        rpni_data = observation_table_to_data(data["observation_table"]) # not working!!!
         dfa_b = run_RPNI(rpni_data, automaton_type="dfa")
         opt_b_time = time.time() - opt_b_start
         save_automaton_to_file(dfa_b, path="output/magento_result_b_" + str(test_coverage))
-        opt_b_acc = accuracy(dfa_b,
-                             set([w for w, l in total_traces if l]),
-                             set([w for w, l in total_traces if not l]))
+        if not dfa_b.is_input_complete():
+            dfa_b.make_input_complete("self_loop")
+        opt_b_acc = accuracy(dfa_b, passed_tests_test, failed_tests_test)
 
         results = results.append({"test_coverage": test_coverage,
                                   "l_star_learning_time": data["total_time"],

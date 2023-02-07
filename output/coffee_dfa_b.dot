@@ -1,0 +1,16 @@
+digraph "output/coffee_dfa_b" {
+s0 [label=s0];
+s1 [label=s1];
+s2 [label=s2];
+s3 [label=s3, shape=doublecircle];
+s0 -> s1  [label=coin];
+s0 -> s3  [label=button];
+s1 -> s2  [label=coin];
+s1 -> s3  [label=button];
+s2 -> s2  [label=button];
+s2 -> s0  [label=coin];
+s3 -> s3  [label=button];
+s3 -> s3  [label=coin];
+__start0 [label="", shape=none];
+__start0 -> s0  [label=""];
+}
