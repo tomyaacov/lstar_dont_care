@@ -1,10 +1,20 @@
 digraph "output/gearbox_dfa_b" {
 s0 [label=s0];
+s1 [label=s1];
+s2 [label=s2, shape=doublecircle];
 s0 -> s0  [label=press_clutch];
 s0 -> s0  [label=release_clutch];
-s0 -> s0  [label=put_in_reverse];
+s0 -> s1  [label=put_in_reverse];
 s0 -> s0  [label=increase_gear];
 s0 -> s0  [label=decrease_gear];
+s1 -> s0  [label=release_clutch];
+s1 -> s2  [label=put_in_reverse];
+s1 -> s0  [label=increase_gear];
+s1 -> s0  [label=decrease_gear];
+s2 -> s2  [label=release_clutch];
+s2 -> s2  [label=put_in_reverse];
+s2 -> s2  [label=increase_gear];
+s2 -> s2  [label=decrease_gear];
 __start0 [label="", shape=none];
 __start0 -> s0  [label=""];
 }
