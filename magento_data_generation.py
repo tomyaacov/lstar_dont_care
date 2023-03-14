@@ -17,6 +17,7 @@ for n in range(1, 5):
             w = base  # without L2
         else:
             w = base[:i] + ["L2"] + base[i:]
+        print(w)
         for j in range(len(w) + 1):
             total_traces.add((tuple(w[:j]), passed(w[:j])))
 total_traces = sorted(list(total_traces))

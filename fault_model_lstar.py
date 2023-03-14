@@ -15,8 +15,8 @@ from aalpy.automata.MooreMachine import MooreMachine
 from random import randint, choice
 from aalpy.learning_algs import run_RPNI
 
-#example = "coffeeMachine"
-example = "gearbox"
+example = "coffeeMachine"
+#example = "gearbox"
 def observation_table_to_data(observation_table: ObservationTable):
     data = []
     for prefix in observation_table.S:
@@ -160,7 +160,7 @@ class TestOracle(Oracle):
 
 #oracle = TestOracle(B.get_input_alphabet(), sul, sample_size=500, min_walk_len=1, max_sample_len=10)
 #oracle = BFEOracle(B.get_input_alphabet(), sul, depth=7)
-#oracle = RandomWalkEqOracle(B.get_input_alphabet(), sul, num_steps=50000)
+oracle = RandomWalkEqOracle(B.get_input_alphabet(), sul, num_steps=500)
 oracle = RandomWMethodEqOracle(B.get_input_alphabet(), sul, walks_per_state=5000, walk_len=15)
 dfa3, data = run_Lstar(B.get_input_alphabet(), sul, oracle, closing_strategy='longest_first', cex_processing=None,
                        automaton_type='moore', cache_and_non_det_check=False, return_data=True, print_level=0)

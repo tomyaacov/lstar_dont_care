@@ -1,9 +1,0 @@
-digraph "output/magento_result_a_0.3" {
-0 [label=0];
-0 -> 0  [label=L1];
-0 -> 0  [label=L2];
-0 -> 0  [label=A];
-0 -> 0  [label=C];
-__start0 [label="", shape=none];
-__start0 -> 0  [label=""];
-}

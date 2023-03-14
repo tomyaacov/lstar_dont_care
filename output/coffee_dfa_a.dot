@@ -2,18 +2,12 @@ digraph "output/coffee_dfa_a" {
 0 [label=0, shape=doublecircle];
 1 [label=1];
 2 [label=2];
-3 [label=3];
-4 [label=4];
-0 -> 0  [label=coin];
-0 -> 0  [label=button];
-1 -> 1  [label=coin];
-1 -> 0  [label=button];
-2 -> 1  [label=coin];
-2 -> 1  [label=button];
-3 -> 2  [label=coin];
-3 -> 0  [label=button];
-4 -> 3  [label=coin];
-4 -> 0  [label=button];
+0 -> 0  [label=C];
+0 -> 0  [label=B];
+1 -> 2  [label=C];
+1 -> 1  [label=B];
+2 -> 1  [label=C];
+2 -> 0  [label=B];
 __start0 [label="", shape=none];
-__start0 -> 4  [label=""];
+__start0 -> 1  [label=""];
 }
