@@ -43,6 +43,6 @@ python test_suite_based_lstar.py
 ```
 
 5. Run algorithms experiment on the coffee\magento examples:
-6. ```shell
+```shell
 python rc_lstar.py
 ```

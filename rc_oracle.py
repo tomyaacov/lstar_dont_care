@@ -4,14 +4,16 @@ from aalpy.automata.MooreMachine import MooreMachine
 from random import randint, choice
 
 class RCOracle(Oracle):
-    def __init__(self, alphabet, sul: RCSUL, oracle):
+    def __init__(self, alphabet, sul, oracle):
         self.alphabet = alphabet
         self.sul = sul
         self.num_queries = 0
         self.num_steps = 0
         self.oracle = oracle
+        self.equivalence_queries = 0
 
     def find_cex(self, hypothesis: MooreMachine):
+        self.equivalence_queries += 1
         for failed_test in self.sul.failed_tests:
             if len(failed_test) == 0:
                 result = hypothesis.initial_state.output

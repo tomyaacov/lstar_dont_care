@@ -14,6 +14,7 @@ class RCSUL(SUL):
             for i in range(len(p)):
                 self.passed_tests.add(p[:i + 1])
         self.num_queries = 0
+        self.membership_queries = 0
         self.num_steps = 0
         self.system_queries = 0
         self.already_not_in_system = False
@@ -24,6 +25,7 @@ class RCSUL(SUL):
         if type(word) == list:
             word = tuple(word)
         self.num_queries += 1
+        self.membership_queries += 1
         self.num_steps += len(word)
         if len(word) == 0:
             in_system = self.spec_dfa.initial_state.is_accepting

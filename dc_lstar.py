@@ -111,7 +111,10 @@ def run_Lstar(alphabet: list, sul: SUL, eq_oracle: Oracle, automaton_type,
         'eq_oracle_time': eq_query_time,
         'total_time': total_time,
         'characterization set': observation_table.E,
-        'observation_table': observation_table
+        'observation_table': observation_table,
+        'membership_queries': sul.membership_queries,
+        'equivalence_queries': eq_oracle.equivalence_queries,
+        'system_queries': sul.system_queries
     }
     if cache_and_non_det_check:
         info['cache_saved'] = sul.num_cached_queries
