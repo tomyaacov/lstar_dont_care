@@ -109,7 +109,7 @@ def run_single_test(M_path, B_path, oracle_opt, test_set_size):
     save_automaton_to_file(dfa, path="output/tmp_b")
 
     results["sample_based_similarity"] = sample_based_dfa_equivalence(dfa, B)
-    results["language_similarity"] = get_dfas_distance(get_intersection_dfa(B, M), get_intersection_dfa(dfa, M))
+    results["language_distance"] = get_dfas_distance(get_intersection_dfa(B, M), get_intersection_dfa(dfa, M))
     return results
 
 
@@ -141,7 +141,7 @@ for oracle_opt in oracles:
                                                 "dfa_time",
                                                 "dfa_size",
                                                 "sample_based_similarity",
-                                                "language_similarity"])
+                                                "language_distance"])
     for i in range(1, 5):
         example = "magento_" + str(i)
         M = load_automaton_from_file("data/our_models/" + example + "_m.dot", automaton_type='dfa')
@@ -154,4 +154,6 @@ for oracle_opt in oracles:
         current_results["test_sample_size"] = test_sample_size
         results[oracle_opt] = results[oracle_opt].append(current_results, ignore_index=True)
     results[oracle_opt].to_csv("output/" + oracle_opt + ".csv", index=False)
+
+
 
