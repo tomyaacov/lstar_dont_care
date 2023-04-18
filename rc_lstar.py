@@ -13,7 +13,8 @@ from aalpy.base.Oracle import Oracle
 from aalpy.automata.MooreMachine import MooreMachine
 from random import randint, choice, sample, random
 from aalpy.learning_algs import run_RPNI
-from dfa_equivalence import sample_based_dfa_equivalence, get_dfas_distance, get_intersection_dfa
+from dfa_equivalence import sample_based_dfa_equivalence, get_dfas_distance
+from utils import get_intersection_dfa
 from collections import Counter
 import pandas as pd
 
@@ -145,7 +146,7 @@ for oracle_opt in oracles:
     for i in range(1, 5):
         example = "magento_" + str(i)
         M = load_automaton_from_file("data/our_models/" + example + "_m.dot", automaton_type='dfa')
-        B = load_automaton_from_file("data/our_models/" + example + "_b.dot", automaton_type='dfa')
+        B = load_automaton_from_file("data/our_models/" + example + "_b1.dot", automaton_type='dfa')
         failed_tests, passed_tests = generate_tests(M, B, 10, 0.2)
         fail_prob = len(failed_tests) / (len(failed_tests) + len(passed_tests))
         current_results = run_n_tests(example, n, oracle_opt, test_sample_size)

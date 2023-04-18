@@ -1,7 +1,74 @@
 from aalpy.learning_algs.deterministic.ObservationTable import ObservationTable
 from collections import defaultdict
 from itertools import combinations
+from aalpy.automata import DfaState, Dfa
+import numpy as np
+from automata.fa.dfa import DFA
 
+
+def dfa_to_transtion_matrix(dfa):
+    l = dfa.states
+    S = np.zeros((1, len(l)))
+    A = np.zeros((len(l), len(l)))
+    F = np.zeros((len(l), 1))
+    S[0, dfa.initial_state] = 1
+    for i in l:
+        if i in dfa.final_states:
+            F[i] = 1
+        for _, j in dfa.transitions[i].items():
+            A[i, j] = 1
+    return S, A, F
+
+
+def aalpy_to_automata_lib_format(dfa):
+    d = dict([(v, k) for k, v in enumerate(dfa.states)])
+    states = set(d.values())
+    input_symbols = set(dfa.get_input_alphabet())
+    transitions = {}
+    for s, i in d.items():
+        transitions[i] = {}
+        for a, s2 in s.transitions.items():
+            transitions[i][a] = d[s2]
+    initial_state = d[dfa.initial_state]
+    final_states = set([i for s,i in d.items() if s.is_accepting])
+    return DFA(states=states,
+               input_symbols=input_symbols,
+               transitions=transitions,
+               initial_state=initial_state,
+               final_states=final_states
+               )
+def automata_lib_to_aalpy_format(dfa):
+    l = []
+    init_index = dfa.initial_state
+    for i in dfa.states:
+        s = DfaState(i)
+        s.is_accepting = i in dfa.final_states
+        l.append(s)
+    for i in dfa.states:
+        for a, j in dfa.transitions[i].items():
+            l[i].transitions[a] = l[j]
+    return Dfa(l[init_index], l)
+
+
+def get_sim_diff_dfa(dfa1, dfa2):
+    A = aalpy_to_automata_lib_format(dfa1)
+    B = aalpy_to_automata_lib_format(dfa2)
+    return A ^ B
+
+
+def get_intersection_dfa(dfa1, dfa2):
+    A = aalpy_to_automata_lib_format(dfa1)
+    B = aalpy_to_automata_lib_format(dfa2)
+    C = A & B
+    D = automata_lib_to_aalpy_format(C)
+    return D
+
+def get_union_dfa(dfa1, dfa2):
+    A = aalpy_to_automata_lib_format(dfa1)
+    B = aalpy_to_automata_lib_format(dfa2)
+    C = A | B
+    D = automata_lib_to_aalpy_format(C)
+    return D
 
 def get_all_groupings(S):
     all_groupings = []
