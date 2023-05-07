@@ -42,9 +42,11 @@ def run_Lstar(alphabet: list, sul: SUL, eq_oracle: Oracle, automaton_type,
         if not cex_processing:
             inconsistent_rows = observation_table.get_causes_of_inconsistency()
             while inconsistent_rows is not None:
+                print(inconsistent_rows)
                 extend_set(observation_table.E, inconsistent_rows)
                 observation_table.update_obs_table(e_set=inconsistent_rows)
-                inconsistent_rows = observation_table.get_causes_of_inconsistency()
+                new_inconsistent_rows = observation_table.get_causes_of_inconsistency()
+                inconsistent_rows = new_inconsistent_rows
 
         # Close observation table
         rows_to_close = observation_table.get_rows_to_close(closing_strategy)

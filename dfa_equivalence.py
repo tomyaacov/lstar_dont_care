@@ -15,19 +15,10 @@ def get_dfas_distance(dfa1, dfa2):
 
 def sample_based_dfa_equivalence(dfa1, dfa2, n=1000, stop_prob=0.2):
     equivalent = 0
-    for i in range(n//2):
+    for i in range(n):
         w = []
         while True:
             w.append(choice(dfa1.current_state.get_diff_state_transitions() + dfa1.current_state.get_same_state_transitions()))
-            if random() <= stop_prob:
-                break
-        if dfa1.execute_sequence(dfa1.initial_state, w)[-1] == dfa2.execute_sequence(dfa2.initial_state, w)[-1]:
-            equivalent += 1
-    for i in range(n//2):
-        w = []
-        while True:
-            w.append(choice(
-                dfa2.current_state.get_diff_state_transitions() + dfa2.current_state.get_same_state_transitions()))
             if random() <= stop_prob:
                 break
         if dfa1.execute_sequence(dfa1.initial_state, w)[-1] == dfa2.execute_sequence(dfa2.initial_state, w)[-1]:

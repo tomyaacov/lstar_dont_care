@@ -4,6 +4,8 @@ from itertools import combinations
 from aalpy.automata import DfaState, Dfa
 import numpy as np
 from automata.fa.dfa import DFA
+from aalpy.utils import make_input_complete, load_automaton_from_file, save_automaton_to_file
+from pydot import graph_from_dot_file, Node, Edge
 
 
 def dfa_to_transtion_matrix(dfa):
@@ -48,6 +50,14 @@ def automata_lib_to_aalpy_format(dfa):
         for a, j in dfa.transitions[i].items():
             l[i].transitions[a] = l[j]
     return Dfa(l[init_index], l)
+
+
+def are_dfa_equivalent(dfa1, dfa2):
+    make_input_complete(dfa1, "sink_state")
+    make_input_complete(dfa2, "sink_state")
+    A = aalpy_to_automata_lib_format(dfa1)
+    B = aalpy_to_automata_lib_format(dfa2)
+    return A == B
 
 
 def get_sim_diff_dfa(dfa1, dfa2):
@@ -143,4 +153,11 @@ def find_minimal_consistent_dfa(observation_table):
                     return final_dfa.gen_hypothesis(check_for_duplicate_rows=False)  # TODO: maybe change to True
         num_of_groups += 1
 
-
+def load_automaton(path, automaton_type, compute_prefixes=False):
+    graph = graph_from_dot_file(path)[0]
+    graph.add_node(Node('__start0', label="", shape='none'))
+    graph.add_edge(Edge('__start0', "0", label=""))
+    graph.write_raw(path)
+    A = load_automaton_from_file(path, automaton_type, compute_prefixes=compute_prefixes)
+    save_automaton_to_file(A, path.replace('.dot', ''))
+    return load_automaton_from_file(path, automaton_type, compute_prefixes=compute_prefixes)

@@ -28,24 +28,30 @@ class RCSUL(SUL):
         self.membership_queries += 1
         self.num_steps += len(word)
         if len(word) == 0:
-            in_system = self.spec_dfa.initial_state.is_accepting
-        else:
-            in_system = self.spec_dfa.execute_sequence(self.spec_dfa.initial_state, word)[-1]
-        if not in_system:
-            return ["?"]
-        if word in self.passed_tests:
             return ["-"]
+        else:
+            in_system = self.spec_dfa.execute_sequence(self.spec_dfa.initial_state, word)
+        if isinstance(in_system, list) and not in_system[-1]:
+            for i in range(len(word)):
+                if not in_system[i]:
+                    p = []
+                    if i > 0:
+                        p = self.system_dfa.execute_sequence(self.system_dfa.initial_state, word[:i])
+                    q = ["?"] * len(word[i:])
+                    return ["+" if x else "-" for x in p] + q
+        if word in self.passed_tests:
+            return len(word)*["-"]
         if word in self.failed_tests:
-            return ["+"]
+            failed_in_system = self.system_dfa.execute_sequence(self.system_dfa.initial_state, word)
+            return ["+" if x else "-" for x in failed_in_system]
         self.system_queries += 1
         if len(word) == 0:
             failed_in_system = self.system_dfa.initial_state.is_accepting
+            return ["+" if x else "-" for x in [failed_in_system]]
         else:
-            failed_in_system = self.system_dfa.execute_sequence(self.system_dfa.initial_state, word)[-1]
-        if failed_in_system:
-            return ["+"]
-        else:
-            return ["-"]
+            failed_in_system = self.system_dfa.execute_sequence(self.system_dfa.initial_state, word)
+        return ["+" if x else "-" for x in failed_in_system]
+
 
 
 
