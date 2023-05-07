@@ -1,5 +1,6 @@
 from aalpy.base import SUL
 from aalpy.automata.Dfa import Dfa
+from aalpy.base.CacheTree import CacheTree, CacheDict
 
 
 class RCSUL(SUL):
@@ -20,6 +21,7 @@ class RCSUL(SUL):
         self.already_not_in_system = False
         self.already_failed_in_system = False
         self.prefix = []
+        self.cache = CacheTree()
 
     def query(self, word: tuple) -> list:
         if type(word) == list:
@@ -27,6 +29,7 @@ class RCSUL(SUL):
         self.num_queries += 1
         self.membership_queries += 1
         self.num_steps += len(word)
+        final_result = None
         if len(word) == 0:
             return ["-"]
         else:
@@ -38,19 +41,31 @@ class RCSUL(SUL):
                     if i > 0:
                         p = self.system_dfa.execute_sequence(self.system_dfa.initial_state, word[:i])
                     q = ["?"] * len(word[i:])
-                    return ["+" if x else "-" for x in p] + q
-        if word in self.passed_tests:
-            return len(word)*["-"]
-        if word in self.failed_tests:
+                    final_result = ["+" if x else "-" for x in p] + q
+                    break
+        elif word in self.passed_tests:
+            final_result = len(word) * ["-"]
+        elif word in self.failed_tests:
             failed_in_system = self.system_dfa.execute_sequence(self.system_dfa.initial_state, word)
-            return ["+" if x else "-" for x in failed_in_system]
-        self.system_queries += 1
-        if len(word) == 0:
-            failed_in_system = self.system_dfa.initial_state.is_accepting
-            return ["+" if x else "-" for x in [failed_in_system]]
+            final_result = ["+" if x else "-" for x in failed_in_system]
         else:
-            failed_in_system = self.system_dfa.execute_sequence(self.system_dfa.initial_state, word)
-        return ["+" if x else "-" for x in failed_in_system]
+            self.system_queries += 1
+            if len(word) == 0:
+                failed_in_system = self.system_dfa.initial_state.is_accepting
+                final_result = ["+" if x else "-" for x in [failed_in_system]]
+            else:
+                failed_in_system = self.system_dfa.execute_sequence(self.system_dfa.initial_state, word)
+                final_result = ["+" if x else "-" for x in failed_in_system]
+
+        cached_query = self.cache.in_cache(word)
+        if cached_query:
+            if cached_query != tuple(final_result):
+                raise Exception("Cached query is not the same as the result of the query on word", word, cached_query, final_result)
+        self.cache.reset()
+        for i, o in zip(word, final_result):
+            self.cache.step_in_cache(i, o)
+
+        return final_result
 
 
 

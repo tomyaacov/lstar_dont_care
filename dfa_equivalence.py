@@ -13,12 +13,13 @@ def get_dfas_distance(dfa1, dfa2):
     return np.matmul(np.matmul(S, C), F)[0][0]
 
 
-def sample_based_dfa_equivalence(dfa1, dfa2, n=1000, stop_prob=0.2):
+def sample_based_dfa_equivalence(M, dfa1, dfa2, n=1000, stop_prob=0.2):
     equivalent = 0
     for i in range(n):
         w = []
+        M.reset_to_initial()
         while True:
-            w.append(choice(dfa1.current_state.get_diff_state_transitions() + dfa1.current_state.get_same_state_transitions()))
+            w.append(choice(M.current_state.get_diff_state_transitions() + M.current_state.get_same_state_transitions()))
             if random() <= stop_prob:
                 break
         if dfa1.execute_sequence(dfa1.initial_state, w)[-1] == dfa2.execute_sequence(dfa2.initial_state, w)[-1]:

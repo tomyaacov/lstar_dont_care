@@ -59,7 +59,7 @@ def run_Lstar(alphabet: list, sul: SUL, eq_oracle: Oracle, automaton_type,
             rows_to_close = observation_table.get_rows_to_close(closing_strategy)
 
         # Generate hypothesis
-        hypothesis = observation_table.gen_hypothesis(check_for_duplicate_rows=cex_processing is None)
+        hypothesis = observation_table.gen_hypothesis(no_cex_processing_used=cex_processing is None)
 
         if print_level > 1:
             print(f'Hypothesis {learning_rounds}: {len(hypothesis.states)} states.')

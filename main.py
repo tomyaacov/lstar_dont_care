@@ -35,7 +35,7 @@ def run_n_tests(example, bug, n, oracle_opt, test_set_size, name):
 #                 c = yield False
 # results = {}
 # test_sample_size = 10
-# n = 10
+# n = 5
 # oracles = ["SampleBasedRCOracle", "RandomWalkEqOracle", "RandomWMethodEqOracle"]
 # for oracle_opt in oracles:
 #     results[oracle_opt] = pd.DataFrame(columns=["#sessions",
@@ -63,10 +63,10 @@ def run_n_tests(example, bug, n, oracle_opt, test_set_size, name):
 #             current_results["fail_prob"] = fail_prob
 #             current_results["test_sample_size"] = test_sample_size
 #             results[oracle_opt] = results[oracle_opt].append(current_results, ignore_index=True)
-#         results[oracle_opt].to_csv("output/" + example + "_" + oracle_opt + ".csv", index=False)
+#     results[oracle_opt].to_csv("output/" + example + "_" + oracle_opt + ".csv", index=False)
 
 
-#
+
 # example = "coffee"
 # def bug():
 #     while True:
@@ -98,9 +98,10 @@ def run_n_tests(example, bug, n, oracle_opt, test_set_size, name):
 #
 # results = {}
 # test_sample_size = 10
-# n = 1
+# n = 5
 # oracles = ["SampleBasedRCOracle", "RandomWalkEqOracle", "RandomWMethodEqOracle"]
 # for oracle_opt in oracles:
+#     print(oracle_opt)
 #     results[oracle_opt] = pd.DataFrame(columns=["#max_coins",
 #                                                 "#coins_type",
 #                                                     "fail_prob",
@@ -134,7 +135,7 @@ example = "random"
 
 results = {}
 test_sample_size = 10
-n = 1
+n = 5
 oracles = ["SampleBasedRCOracle", "RandomWalkEqOracle", "RandomWMethodEqOracle"]
 for oracle_opt in oracles:
     results[oracle_opt] = pd.DataFrame(columns=["#size",

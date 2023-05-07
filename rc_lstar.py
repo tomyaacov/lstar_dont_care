@@ -102,11 +102,12 @@ def run_single_test(M, B, oracle_opt, test_set_size, name):
     rpni_data = observation_table_to_data(data["observation_table"])
     dfa = run_RPNI(rpni_data, automaton_type="dfa", print_info=False)
     opt_b_time = time.time() - opt_b_start
+
+    save_automaton_to_file(dfa, path="output/" + name + "_dfa_b")
     results["dfa_time"] = opt_b_time
     results["dfa_size"] = dfa.size
-
-    results["sample_based_similarity"] = sample_based_dfa_equivalence(dfa, B)
-    save_automaton_to_file(dfa, path="output/" + name + "_dfa_b")
+    make_input_complete(dfa, 'sink_state')
+    results["sample_based_similarity"] = sample_based_dfa_equivalence(M, dfa, B)
     #results["language_distance"] = get_dfas_distance(get_intersection_dfa(B, M), get_intersection_dfa(dfa, M))
     return results
 
