@@ -10,10 +10,12 @@ class RCSUL(SUL):
         self.spec_dfa = spec_dfa
         self.system_dfa = system_dfa
         self.failed_tests = failed_tests
-        self.passed_tests = {tuple()}
-        for p in passed_tests:
-            for i in range(len(p)):
-                self.passed_tests.add(p[:i + 1])
+        # prefix closure
+        # self.passed_tests = {tuple()}
+        # for p in passed_tests:
+        #     for i in range(len(p)):
+        #         self.passed_tests.add(p[:i + 1])
+        self.passed_tests = passed_tests
         self.num_queries = 0
         self.membership_queries = 0
         self.num_steps = 0
@@ -34,20 +36,19 @@ class RCSUL(SUL):
             return ["-"]
         else:
             in_system = self.spec_dfa.execute_sequence(self.spec_dfa.initial_state, word)
-        if isinstance(in_system, list) and not in_system[-1]:
-            for i in range(len(word)):
-                if not in_system[i]:
-                    p = []
-                    if i > 0:
-                        p = self.system_dfa.execute_sequence(self.system_dfa.initial_state, word[:i])
-                    q = ["?"] * len(word[i:])
-                    final_result = ["+" if x else "-" for x in p] + q
-                    break
-        elif word in self.passed_tests:
-            final_result = len(word) * ["-"]
-        elif word in self.failed_tests:
+        # if isinstance(in_system, list) and not in_system[-1]:
+        #     for i in range(len(word)):
+        #         if not in_system[i]:
+        #             p = []
+        #             if i > 0:
+        #                 p = self.system_dfa.execute_sequence(self.system_dfa.initial_state, word[:i])
+        #             q = ["?"] * len(word[i:])
+        #             final_result = ["+" if x else "-" for x in p] + q
+        #             break
+        if word in self.failed_tests:
             failed_in_system = self.system_dfa.execute_sequence(self.system_dfa.initial_state, word)
             final_result = ["+" if x else "-" for x in failed_in_system]
+            final_result = [x if y else "?" for x, y in zip(final_result, in_system)]
         else:
             self.system_queries += 1
             if len(word) == 0:
@@ -56,6 +57,7 @@ class RCSUL(SUL):
             else:
                 failed_in_system = self.system_dfa.execute_sequence(self.system_dfa.initial_state, word)
                 final_result = ["+" if x else "-" for x in failed_in_system]
+                final_result = [x if y else "?" for x, y in zip(final_result, in_system)]
 
         cached_query = self.cache.in_cache(word)
         if cached_query:
@@ -84,8 +86,8 @@ class RCSUL(SUL):
         self.num_steps += 1
         self.prefix.append(letter)
         in_system = self.spec_dfa.step(letter)
-        if (not in_system) or self.already_not_in_system:
-            self.already_not_in_system = True
+        # change if you want to use prefix closure
+        if not in_system:
             return "?"
         self.system_queries += 1
         failed_in_system = self.system_dfa.step(letter)

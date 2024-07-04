@@ -18,6 +18,7 @@ def run_Lstar(alphabet: list, sul: SUL, eq_oracle: Oracle, automaton_type,
     assert cex_processing in counterexample_processing_strategy
     assert closedness_type in closedness_options
     assert print_level in print_options
+    cex = None
 
     if cache_and_non_det_check:
         # Wrap the sul in the CacheSUL, so that all steps/queries are cached
@@ -41,8 +42,8 @@ def run_Lstar(alphabet: list, sul: SUL, eq_oracle: Oracle, automaton_type,
         # Make observation table consistent (iff there is no counterexample processing)
         if not cex_processing:
             inconsistent_rows = observation_table.get_causes_of_inconsistency()
+
             while inconsistent_rows is not None:
-                print(inconsistent_rows)
                 extend_set(observation_table.E, inconsistent_rows)
                 observation_table.update_obs_table(e_set=inconsistent_rows)
                 new_inconsistent_rows = observation_table.get_causes_of_inconsistency()
@@ -70,14 +71,16 @@ def run_Lstar(alphabet: list, sul: SUL, eq_oracle: Oracle, automaton_type,
         # Find counterexample
         eq_query_start = time.time()
         cex = eq_oracle.find_cex(hypothesis)
+        #print(cex)
         eq_query_time += time.time() - eq_query_start
 
         # If no counterexample is found, return the hypothesis
         if cex is None:
             break
 
-        if print_level == 3:
+        if print_level == 1:
             print('Counterexample', cex)
+            print(hypothesis.states.__len__())
 
         # Process counterexample and ask membership queries
         if not cex_processing:

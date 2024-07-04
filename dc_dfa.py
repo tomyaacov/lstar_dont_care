@@ -140,12 +140,12 @@ def mealy_from_table(transitions, outputs, init_state_idx, alphabet):
     states = []
     states_dict = {}
     for i in range(transitions.shape[0]):
-        states.append(MealyState(i))
-        states_dict[i] = states[-1]
+        states.append(MealyState(str(i)))
+        states_dict[str(i)] = states[-1]
     for i in range(transitions.shape[0]):
         for j in range(transitions.shape[1]):
-            states[i].transitions[alphabet[j]] = states_dict[transitions[i,j]]
-            states[i].output_fun[alphabet[j]] = outputs[i,j]
+            states[i].transitions[alphabet[j]] = states_dict[str(transitions[i, j])]
+            states[i].output_fun[alphabet[j]] = str(outputs[i,j])
     return MealyMachine(states[init_state_idx], states)
 
 
@@ -157,7 +157,7 @@ def dfa_from_table(transitions, outputs, init_state_idx, alphabet):
         for j in range(transitions.shape[1]):
             k = (transitions[i, j], outputs[i, j])
             if k not in states_dict:
-                states.append(DfaState(counter))
+                states.append(DfaState(str(counter)))
                 states_dict[k] = states[-1]
                 counter += 1
     if (init_state_idx, 0) not in states_dict: # initial state should be accepted (not a bug)
